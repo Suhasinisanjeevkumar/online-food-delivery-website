@@ -28,6 +28,10 @@ A full-stack **Flask-based Online Food Delivery System** that allows users to br
 ---
 
 ## 📁 Project Structure
+
+# 📌 Project Structure
+
+```plaintext
 online-food-delivery-website/
 │
 ├── backend/
@@ -47,17 +51,11 @@ online-food-delivery-website/
 ├── requirements.txt
 └── README.md
 
----
-
-## ⚙️ Installation & Setup
-
-### 1. Clone the repository
-```bash
+⚙️ Installation & Setup
+1. Clone the repository
 git clone https://github.com/Suhasinisanjeevkumar/online-food-delivery-website.git
-    Navigate to backend folder
+2. Navigate to backend folder
 cd online-food-delivery-website/backend
-
-
 3. Create virtual environment (optional but recommended)
 python -m venv .venv
 .venv\Scripts\activate   # Windows
