@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="welcome-section slide-up">
+        <h1>Hello, {{ current_user.username }}! 👋</h1>
+        <p>What would you like to eat today?</p>
+    </div>
+
+    <div class="categories-grid">
+        {% for category in categories %}
+        <div class="category-card slide-up" data-category-id="{{ category.id }}" onclick="window.location.href='/category/{{ category.id }}'">
+            <div class="category-icon">
+                {% if category.name == 'Meals' %}🍱
+                {% elif category.name == 'Fast Food' %}🍔
+                {% elif category.name == 'Drinks' %}🥤
+                {% elif category.name == 'Desserts' %}🍰
+                {% else %}🍽️{% endif %}
+            </div>
+            <h3>{{ category.name }}</h3>
+            <p>Explore delicious options</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

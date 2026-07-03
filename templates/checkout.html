@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header slide-up">
+        <a href="{{ url_for('cart') }}" class="back-btn">←</a>
+        <h1>Checkout</h1>
+    </div>
+
+    <div class="checkout-grid">
+        <div class="checkout-form-column">
+            <!-- Delivery Address Section -->
+            <div class="checkout-section slide-up">
+                <h3>📍 Delivery Address</h3>
+                
+                {% if addresses %}
+                <div style="margin-bottom: 20px;">
+                    <label class="form-label">Saved Addresses</label>
+                    {% for address in addresses %}
+                    <div class="saved-address" onclick="document.querySelector('textarea[name=address]').value = '{{ address.address }}'">
+                        {{ address.address }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="POST" id="checkoutForm">
+                    <div class="form-group">
+                        <label class="form-label">Delivery Address</label>
+                        <textarea name="address" required class="form-textarea" placeholder="Enter your complete delivery address including street, city, and zip code"></textarea>
+                    </div>
+
+                    <!-- Payment Method Section -->
+                    <h3 style="margin-top: 24px; margin-bottom: 16px;">💳 Payment Method</h3>
+                    
+                    <label class="payment-option selected" onclick="selectPayment(this)">
+                        <input type="radio" name="payment_method" value="COD" checked onchange="toggleCardDetails()">
+                        <span class="payment-icon">💵</span>
+                        <div>
+                            <strong>Cash on Delivery</strong>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">Pay when your order arrives</p>
+                        </div>
+                    </label>
+                    
+                    <label class="payment-option" onclick="selectPayment(this)">
+                        <input type="radio" name="payment_method" value="UPI" onchange="toggleCardDetails()">
+                        <span class="payment-icon">📱</span>
+                        <div>
+                            <strong>UPI Payment</strong>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">Pay via UPI apps</p>
+                        </div>
+                    </label>
+                    
+                    <label class="payment-option" onclick="selectPayment(this)">
+                        <input type="radio" name="payment_method" value="Card" onchange="toggleCardDetails()">
+                        <span class="payment-icon">💳</span>
+                        <div>
+                            <strong>Credit/Debit Card</strong>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">Visa, Mastercard, etc.</p>
+                        </div>
+                    </label>
+
+                    <!-- Card Details -->
+                    <div id="cardDetails" class="card-details" style="display: none;">
+                        <h4 style="margin-bottom: 16px;">Card Details</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Card Type</label>
+                            <select name="card_type" class="form-select">
+                                <option value="credit">Credit Card</option>
+                                <option value="debit">Debit Card</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Card Number</label>
+                            <input type="text" name="card_number" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+                        </div>
+                        
+                        <div class="card-details-grid">
+                            <div class="form-group">
+                                <label class="form-label">Expiry Date</label>
+                                <input type="text" name="expiry_date" class="form-input" placeholder="MM/YY" maxlength="5" oninput="formatExpiryDate(this)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CVV</label>
+                                <input type="text" name="cvv" class="form-input" placeholder="123" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cardholder Name</label>
+                            <input type="text" name="cardholder_name" class="form-input" placeholder="John Doe">
+                        </div>
+                        
+                        <div style="display: flex; gap: 8px; color: var(--text-muted);">
+                            <span>💳</span>
+                            <span>🔒 Secure payment</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 24px;">
+                        ✓ Confirm Order
+                    </button>
+                </form>
+            </div>
+
+            <!-- Save New Address -->
+            <div class="checkout-section slide-up">
+                <h3>💾 Save New Address</h3>
+                <form method="POST" action="{{ url_for('save_address') }}">
+                    <div class="form-group">
+                        <input type="text" name="address" class="form-input" placeholder="Enter new address to save for future">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Save Address</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div>
+            <div class="order-summary slide-up">
+                <h3>📦 Order Summary</h3>
+                <div class="order-items">
+                    {% for item_id, item in cart_items.items() %}
+                    <div class="order-item">
+                        <div>
+                            <strong>{{ item.name }}</strong>
+                            <br>
+                            <small style="color: var(--text-secondary);">Qty: {{ item.quantity }}</small>
+                        </div>
+                        <span>${{ "%.2f"|format(item.price * item.quantity) }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="order-total">
+                    <span>Total</span>
+                    <span class="amount">${{ "%.2f"|format(total) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectPayment(element) {
+    document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+}
+
+function toggleCardDetails() {
+    const cardDetails = document.getElementById('cardDetails');
+    const cardPayment = document.querySelector('input[name="payment_method"][value="Card"]');
+    cardDetails.style.display = cardPayment.checked ? 'block' : 'none';
+}
+
+function formatCardNumber(input) {
+    let value = input.value.replace(/\D/g, '');
+    value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+    input.value = value;
+}
+
+function formatExpiryDate(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    input.value = value;
+}
+
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    const cardPayment = document.querySelector('input[name="payment_method"][value="Card"]');
+    
+    if (cardPayment.checked) {
+        const cardNumber = document.querySelector('input[name="card_number"]').value.replace(/\s/g, '');
+        const expiryDate = document.querySelector('input[name="expiry_date"]').value;
+        const cvv = document.querySelector('input[name="cvv"]').value;
+        const cardholderName = document.querySelector('input[name="cardholder_name"]').value;
+        
+        if (cardNumber.length !== 16) {
+            alert('Please enter a valid 16-digit card number');
+            e.preventDefault();
+            return;
+        }
+        
+        if (!expiryDate.match(/^\d{2}\/\d{2}$/)) {
+            alert('Please enter a valid expiry date (MM/YY)');
+            e.preventDefault();
+            return;
+        }
+        
+        if (cvv.length !== 3) {
+            alert('Please enter a valid 3-digit CVV');
+            e.preventDefault();
+            return;
+        }
+        
+        if (cardholderName.trim().length < 2) {
+            alert('Please enter cardholder name');
+            e.preventDefault();
+            return;
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    toggleCardDetails();
+});
+</script>
+{% endblock %}

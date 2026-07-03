@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}{{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header slide-up">
+        <a href="javascript:history.back()" class="back-btn">←</a>
+        <h1>{{ restaurant.name }}</h1>
+    </div>
+
+    <div class="menu-header slide-up">
+        <h2>{{ restaurant.description }}</h2>
+        <div class="meta">
+            <span>📍 {{ restaurant.address }}</span>
+            <span>📞 {{ restaurant.phone }}</span>
+            <span>⭐ {{ restaurant.rating }} Rating</span>
+        </div>
+    </div>
+
+    <div class="menu-grid">
+        {% for item in menu_items %}
+        <div class="menu-item slide-up">
+            <div class="menu-item-info">
+                <h4>{{ item.name }}</h4>
+                <p>{{ item.description }}</p>
+                <span class="menu-item-price">${{ "%.2f"|format(item.price) }}</span>
+            </div>
+            <form method="POST" action="{{ url_for('add_to_cart') }}" class="add-to-cart-form menu-item-actions">
+                <input type="hidden" name="item_id" value="{{ item.id }}">
+                <input type="number" name="quantity" value="1" min="1" class="quantity-input">
+                <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="floating-cart">
+    <a href="{{ url_for('cart') }}" class="btn btn-primary">
+        🛒 View Cart
+        {% if session.cart %}({{ session.cart|length }}){% endif %}
+    </a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.add-to-cart-form');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const button = this.querySelector('button');
+            const originalText = button.textContent;
+            
+            button.disabled = true;
+            button.textContent = 'Adding...';
+            
+            try {
+                const response = await fetch('/add_to_cart', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateCartCount(data.cart_count);
+                    button.textContent = '✓ Added!';
+                    button.style.background = 'var(--success)';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '';
+                        button.disabled = false;
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                button.textContent = 'Error!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 1500);
+            }
+        });
+    });
+    
+    function updateCartCount(count) {
+        let cartCount = document.querySelector('.cart-count');
+        const cartLink = document.querySelector('.cart-link');
+        const floatingCart = document.querySelector('.floating-cart .btn');
+        
+        if (cartCount) {
+            cartCount.textContent = count;
+        } else if (cartLink) {
+            cartCount = document.createElement('span');
+            cartCount.className = 'cart-count';
+            cartCount.textContent = count;
+            cartLink.appendChild(cartCount);
+        }
+        
+        if (floatingCart) {
+            floatingCart.textContent = `🛒 View Cart (${count})`;
+        }
+    }
+});
+</script>
+{% endblock %}

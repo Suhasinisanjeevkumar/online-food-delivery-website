@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Shopping Cart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header slide-up">
+        <a href="{{ url_for('dashboard') }}" class="back-btn">←</a>
+        <h1>Shopping Cart</h1>
+    </div>
+
+    {% if cart_items %}
+    <div class="cart-container">
+        {% for item_id, item in cart_items.items() %}
+        <div class="cart-item slide-up">
+            <div class="cart-item-info">
+                <h4>{{ item.name }}</h4>
+                <span class="cart-item-price">${{ "%.2f"|format(item.price) }} each</span>
+            </div>
+            <form method="POST" action="{{ url_for('update_cart') }}" class="cart-item-actions">
+                <input type="hidden" name="item_id" value="{{ item_id }}">
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="0" class="quantity-input">
+                <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+            </form>
+        </div>
+        {% endfor %}
+
+        <div class="cart-summary slide-up">
+            <div class="cart-total">
+                <span>Total Amount</span>
+                <span class="amount">${{ "%.2f"|format(total) }}</span>
+            </div>
+            <a href="{{ url_for('checkout') }}" class="btn btn-primary btn-block btn-lg">Proceed to Checkout</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state slide-up">
+        <div class="empty-state-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Add some delicious items to get started</p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Browse Restaurants</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

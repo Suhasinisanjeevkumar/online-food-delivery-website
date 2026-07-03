@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Your Orders{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header slide-up">
+        <a href="{{ url_for('profile') }}" class="back-btn">←</a>
+        <h1>Your Orders</h1>
+    </div>
+
+    {% if orders %}
+    <div style="max-width: 800px;">
+        {% for order in orders %}
+        <div class="order-card slide-up">
+            <div class="order-card-header">
+                <span class="order-id">Order #{{ order.id }}</span>
+                <span class="order-amount">${{ "%.2f"|format(order.total_amount) }}</span>
+            </div>
+            <div class="order-details">
+                <p>
+                    <strong>Status:</strong>
+                    {% if order.status == 'completed' %}
+                        <span class="order-status status-completed">✓ Completed</span>
+                    {% elif order.status == 'confirmed' %}
+                        <span class="order-status status-confirmed">Confirmed</span>
+                    {% else %}
+                        <span class="order-status status-pending">Pending</span>
+                    {% endif %}
+                </p>
+                <p><strong>Date:</strong> {{ order.created_at }}</p>
+                <p><strong>Address:</strong> {{ order.address }}</p>
+                <p><strong>Payment:</strong> {{ order.payment_method }}</p>
+                <p><strong>Items:</strong> {{ order.item_count }} items</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state slide-up">
+        <div class="empty-state-icon">📦</div>
+        <h3>No orders yet</h3>
+        <p>Place your first order and it will appear here</p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

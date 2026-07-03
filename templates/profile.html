@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header slide-up">
+        <h1>Your Profile</h1>
+    </div>
+
+    <div class="profile-grid">
+        <!-- Saved Addresses -->
+        <div class="profile-section slide-up">
+            <h3>📬 Saved Addresses</h3>
+            {% if addresses %}
+                {% for address in addresses %}
+                <div class="address-item">
+                    {{ address.address }}
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="empty-state" style="padding: 40px 20px;">
+                <p style="color: var(--text-secondary);">No saved addresses yet</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Order History -->
+        <div class="profile-section slide-up">
+            <h3>📦 Order History</h3>
+            {% if orders %}
+                {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <span class="order-id">Order #{{ order.id }}</span>
+                        <span class="order-amount">${{ "%.2f"|format(order.total_amount) }}</span>
+                    </div>
+                    <div class="order-details">
+                        <p>
+                            <strong>Status:</strong>
+                            {% if order.status == 'completed' %}
+                                <span class="order-status status-completed">✓ Completed</span>
+                            {% elif order.status == 'confirmed' %}
+                                <span class="order-status status-confirmed">Confirmed</span>
+                            {% else %}
+                                <span class="order-status status-pending">Pending</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Date:</strong> {{ order.created_at[:16] }}</p>
+                        <p><strong>Address:</strong> {{ order.address }}</p>
+                        <p><strong>Payment:</strong> {{ order.payment_method }}</p>
+                    </div>
+                    
+                    {% if order.status != 'completed' %}
+                    <div class="order-actions">
+                        <form method="POST" action="{{ url_for('update_order_status') }}">
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <input type="hidden" name="status" value="completed">
+                            <div class="form-group">
+                                <textarea name="feedback" class="form-textarea" placeholder="Optional: Share your feedback about this order" style="min-height: 60px;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">✓ Mark as Completed</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <p style="color: var(--success); margin-top: 12px; font-weight: 500;">✓ Order Completed</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="empty-state" style="padding: 40px 20px;">
+                <div class="empty-state-icon">📦</div>
+                <h3>No orders yet</h3>
+                <p>Start ordering delicious food!</p>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Browse Restaurants</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} Restaurants{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header slide-up">
+        <a href="{{ url_for('dashboard') }}" class="back-btn">←</a>
+        <div>
+            <h1>{{ category.name }}</h1>
+            <p style="color: var(--text-secondary);">Find the best {{ category.name|lower }} near you</p>
+        </div>
+    </div>
+
+    <div class="search-container slide-up">
+        <form method="GET" class="search-box">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search for food items...">
+        </form>
+    </div>
+
+    {% if restaurants %}
+    <div class="restaurants-grid">
+        {% for restaurant in restaurants %}
+        <a href="{{ url_for('restaurant_menu', restaurant_id=restaurant.id) }}" class="restaurant-card slide-up">
+            <div class="restaurant-image">
+                {% if category.name == 'Meals' %}🍱
+                {% elif category.name == 'Fast Food' %}🍔
+                {% elif category.name == 'Drinks' %}🥤
+                {% elif category.name == 'Desserts' %}🍰
+                {% else %}🍽️{% endif %}
+            </div>
+            <div class="restaurant-info">
+                <h3>{{ restaurant.name }}</h3>
+                <p>{{ restaurant.description }}</p>
+                <div class="restaurant-meta">
+                    <span class="rating">⭐ {{ restaurant.rating }}</span>
+                    <span class="location">📍 {{ restaurant.address }}</span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state slide-up">
+        <div class="empty-state-icon">🔍</div>
+        <h3>No restaurants found</h3>
+        <p>Try a different search term or browse other categories</p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Categories</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
