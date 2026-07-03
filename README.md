@@ -51,24 +51,6 @@ online-food-delivery-website/
 ├── requirements.txt
 └── README.md
 
-⚙️ Installation & Setup
-1. Clone the repository
-git clone https://github.com/Suhasinisanjeevkumar/online-food-delivery-website.git
-2. Navigate to backend folder
-cd online-food-delivery-website/backend
-3. Create virtual environment (optional but recommended)
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-4. Install dependencies
-pip install -r requirements.txt
-5. Run the Flask app
-python app.py
-🌐 Access Application
-
-Open your browser and visit:
-
-http://127.0.0.1:5000/
-👨‍💻 Author
 
 Suhasini Sanjeev Kumar
 GitHub: https://github.com/Suhasinisanjeevkumar
