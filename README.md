@@ -56,26 +56,60 @@ online-food-delivery-website/
 
 
 ## ⚙️ Installation & Setup
-1. Clone the repository
-git clone https://github.com/Suhasinisanjeevkumar/online-food-delivery-website.git
-2. Navigate to backend folder
-cd online-food-delivery-website/backend
-3. Create virtual environment (optional but recommended)
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-4. Install dependencies
-pip install -r requirements.txt
-5. Run the Flask app
-python app.py
 
-🌐 Access Application
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Suhasinisanjeevkumar/Movie-Recommender-System.git
+```
+
+### 2. Navigate to the project folder
+
+```bash
+cd Movie-Recommender-System
+```
+
+### 3. Create a virtual environment (Optional)
+
+```bash
+python -m venv .venv
+```
+
+Activate it:
+
+**Windows**
+
+```bash
+.venv\Scripts\activate
+```
+
+**Mac/Linux**
+
+```bash
+source .venv/bin/activate
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Run the Flask application
+
+```bash
+python app.py
+```
+
+---
+
+## 🌐 Access the Application
+
 Open your browser and visit:
 
+```
 http://127.0.0.1:5000/
-
-👨‍💻 Author
-Suhasini Sanjeev Kumar
-GitHub: https://github.com/Suhasinisanjeevkumar
+```
 
 
 
