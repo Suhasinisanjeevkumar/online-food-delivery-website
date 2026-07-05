@@ -1,72 +1,81 @@
 # 🍔 Online Food Delivery Website
 
-A full-stack **Flask-based Online Food Delivery System** that allows users to browse restaurants, view menus, and place orders online.
+A full-stack **Flask-based Online Food Delivery System** that allows users to browse restaurants, explore menus, add items to the cart, and place orders online through a simple and user-friendly interface.
 
 ---
 
 ## 🚀 Features
 
-- 👤 User registration and login  
-- 🍕 Browse food items and restaurants  
-- 🛒 Add items to cart  
-- 📦 Place orders  
-- 🧾 View order history  
-- 🗄️ SQLite database integration  
-- 🔐 Secure authentication using Flask-Login  
+- 👤 User Registration & Login
+- 🍽️ Browse Restaurants and Food Items
+- 🛒 Add Items to Cart
+- 📦 Place Orders
+- 🧾 View Order History
+- 🔐 Secure Authentication using Flask-Login
+- 🗄️ SQLite Database Integration
+- 📱 Responsive User Interface
 
 ---
 
 ## 🛠️ Tech Stack
 
-- Python (Flask)  
-- HTML5  
-- CSS3  
-- JavaScript  
-- SQLite  
-- Flask-Login  
+- **Backend:** Python, Flask
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Database:** SQLite
+- **Authentication:** Flask-Login
+- **Tools:** Git, GitHub
 
 ---
 
-## 📁 Project Structure
-
-# 📌 Project Structure
+# 📁 Project Structure
 
 ```plaintext
 online-food-delivery-website/
 │
 ├── backend/
-│   ├── routes/
-│   ├── static/
-│   ├── templates/
-│   ├── app.py
-│   ├── food_delivery.db
-│   └── package.json
+│   ├── app.py                     # Main Flask application
+│   ├── food_delivery.db           # SQLite database
+│   ├── package.json               # Project dependencies (if applicable)
+│   │
+│   ├── routes/                    # Flask route files
+│   │
+│   ├── templates/                 # HTML templates
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   ├── menu.html
+│   │   ├── cart.html
+│   │   └── ...
+│   │
+│   └── static/                    # Static files
+│       ├── css/
+│       ├── js/
+│       └── images/
 │
-├── frontend/
-│   └── (UI files)
+├── frontend/                      # Frontend files (if separate)
 │
-├── instance/
+├── instance/                      # Instance configuration
 │
-├── config.py
-├── requirements.txt
-└── README.md
+├── config.py                      # Configuration settings
+├── requirements.txt               # Python dependencies
+├── README.md                      # Project documentation
+└── .gitignore                     # Git ignore file
+```
 
-
-
-
+---
 
 ## ⚙️ Installation & Setup
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Suhasinisanjeevkumar/Movie-Recommender-System.git
+git clone https://github.com/Suhasinisanjeevkumar/online-food-delivery-website.git
 ```
 
-### 2. Navigate to the project folder
+### 2. Navigate to the project directory
 
 ```bash
-cd Movie-Recommender-System
+cd online-food-delivery-website/backend
 ```
 
 ### 3. Create a virtual environment (Optional)
@@ -75,7 +84,7 @@ cd Movie-Recommender-System
 python -m venv .venv
 ```
 
-Activate it:
+### 4. Activate the virtual environment
 
 **Windows**
 
@@ -89,13 +98,13 @@ Activate it:
 source .venv/bin/activate
 ```
 
-### 4. Install dependencies
+### 5. Install the required dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Run the Flask application
+### 6. Run the Flask application
 
 ```bash
 python app.py
@@ -107,10 +116,14 @@ python app.py
 
 Open your browser and visit:
 
-```
+```text
 http://127.0.0.1:5000/
 ```
 
+---
 
+## 👨‍💻 Author
 
+**Suhasini Sanjeev Kumar**
 
+GitHub: https://github.com/Suhasinisanjeevkumar
